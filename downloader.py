@@ -2,13 +2,15 @@ import requests
 import time
 import os
 
+SET_CODE = 'tla'
 #make directories for set if it doesnt exist 
-os.makedirs('images/tla', exist_ok=True)
+
+os.makedirs('images/{SET_CODE}', exist_ok=True)
 for rarity in ['common', 'uncommon', 'rare', 'mythic']:
     #make directories for rarity if it doesnt exist
-    os.makedirs(f'images/tla/{rarity}', exist_ok=True)
+    os.makedirs(f'images/{SET_CODE}/{rarity}', exist_ok=True)
     #get all cards in the draft set, change the query for other sets
-    r = requests.get(f"https://api.scryfall.com/cards/search?q=e:tla+cn>=1+cn<=286+r:{rarity}").json()
+    r = requests.get(f"https://api.scryfall.com/cards/search?q=e:{SET_CODE}+cn>=1+cn<=286+r:{rarity}").json()
     #respect api rules
     time.sleep(0.1)
     print('got', r.get('total_cards'), 'cards of rarity', rarity)
@@ -59,10 +61,7 @@ for rarity in ['common', 'uncommon', 'rare', 'mythic']:
                 color_code = '6'
             else:
                 color_code = color_mapping.get(color[0])
-            if cardname == 'Abandon Attachments':
-                print(card.get('color_identity'))
-                print(color_code)
-            
+           
             #get image url and download image
             image_url = card.get('image_uris').get('normal')
             save_path = f'images/tla/{rarity}/{color_code}_{cardname}.jpg'

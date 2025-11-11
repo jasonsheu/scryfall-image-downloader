@@ -2,7 +2,6 @@ import requests
 import time
 import os
 
-
 #make directories for set if it doesnt exist 
 os.makedirs('images/tla', exist_ok=True)
 for rarity in ['common', 'uncommon', 'rare', 'mythic']:
@@ -17,26 +16,17 @@ for rarity in ['common', 'uncommon', 'rare', 'mythic']:
     #iterate through all cards for current rarity
     for card in cards:
         cardname = card.get('name')
+        
         #handle mdfc cards and // in names
         if '/' in cardname:
-            cardname = cardname.replace('/', '_')
-
-        #create color identity mapping to group images by color in file explorer, remove if not interested in sorty by color and only by name
-        color = card.get('color_identity')
+            cardname = cardname.replace('/', '_')       
         color_mapping = {
-            'W' : '1',
-            'U' : '2',
-            'B' : '3',
-            'R' : '4',
-            'G' : '5'
+                'W' : '1',
+                'U' : '2',
+                'B' : '3',
+                'R' : '4',
+                'G' : '5'
         }
-        if color is None or len(color) == 0:
-            color_code = '0'
-        elif len(color) > 1:
-            color_code = '6'
-        else:
-            color_code = color_mapping.get(color[0])
-
         #special handling of MDFC cards to get both faces 
         if card.get('card_faces') is not None:
             # for color mapping of mdfc cards, use color of first face to keep the cards together in the file explorer
@@ -59,7 +49,20 @@ for rarity in ['common', 'uncommon', 'rare', 'mythic']:
                     print(f'downloaded image for {cardname}')
                 else:
                     print(f"Failed to download image for {cardname}")
+        #regular card case 
         else:
+            #create color identity mapping to group images by color in file explorer, remove if not interested in sorty by color and only by name
+            color = card.get('color_identity')
+            if color is None or len(color) == 0:
+                color_code = '0'
+            elif len(color) > 1:
+                color_code = '6'
+            else:
+                color_code = color_mapping.get(color[0])
+            if cardname == 'Abandon Attachments':
+                print(card.get('color_identity'))
+                print(color_code)
+            
             #get image url and download image
             image_url = card.get('image_uris').get('normal')
             save_path = f'images/tla/{rarity}/{color_code}_{cardname}.jpg'

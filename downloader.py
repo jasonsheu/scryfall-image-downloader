@@ -5,7 +5,9 @@ import os
 SET_CODE = 'tla'
 #make directories for set if it doesnt exist 
 
-os.makedirs('images/{SET_CODE}', exist_ok=True)
+#make directories for set if it doesnt exist 
+
+os.makedirs(f'images/{SET_CODE}', exist_ok=True)
 for rarity in ['common', 'uncommon', 'rare', 'mythic']:
     #make directories for rarity if it doesnt exist
     os.makedirs(f'images/{SET_CODE}/{rarity}', exist_ok=True)
@@ -42,7 +44,7 @@ for rarity in ['common', 'uncommon', 'rare', 'mythic']:
                 color_code = color_mapping.get(color[0])
             for idx, cardface in enumerate(card.get('card_faces')):
                 image_url = cardface.get('image_uris').get('normal')
-                save_path = f'images/tla/{rarity}/{color_code}_{cardname}_{idx}.jpg'
+                save_path = f'images/{SET_CODE}/{rarity}/{color_code}_{cardname}_{idx}.jpg'
                 response = requests.get(image_url)
                 time.sleep(0.2)
                 if response.status_code == 200:    
@@ -64,7 +66,7 @@ for rarity in ['common', 'uncommon', 'rare', 'mythic']:
            
             #get image url and download image
             image_url = card.get('image_uris').get('normal')
-            save_path = f'images/tla/{rarity}/{color_code}_{cardname}.jpg'
+            save_path = f'images/{SET_CODE}/{rarity}/{color_code}_{cardname}.jpg'
             response = requests.get(image_url)
             time.sleep(0.2)
             if response.status_code == 200:    
